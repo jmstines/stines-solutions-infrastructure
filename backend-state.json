@@ -1,0 +1,886 @@
+{
+  "version": 4,
+  "terraform_version": "1.8.0",
+  "serial": 38,
+  "lineage": "e46e0f7d-707b-d430-ea01-a24a6c0a38aa",
+  "outputs": {
+    "api_gateway_url": {
+      "value": "https://1g8xnumgl3.execute-api.us-east-1.amazonaws.com/prod",
+      "type": "string"
+    },
+    "api_routes": {
+      "value": {
+        "contact": "/contact"
+      },
+      "type": [
+        "object",
+        {
+          "contact": "string"
+        }
+      ]
+    }
+  },
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "aws_api_gateway_account",
+      "name": "account_settings",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "api_key_version": "4",
+            "cloudwatch_role_arn": "arn:aws:iam::937278768945:role/api-gateway-logging-role",
+            "features": [
+              "UsagePlans"
+            ],
+            "id": "937278768945",
+            "region": "us-east-1",
+            "throttle_settings": [
+              {
+                "burst_limit": 5000,
+                "rate_limit": 10000
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "dependencies": [
+            "aws_iam_role.api_gateway_logging_role"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_api_gateway_deployment",
+      "name": "contact_deployment",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "created_date": "2025-11-24T23:28:54Z",
+            "description": "",
+            "id": "rru6ao",
+            "region": "us-east-1",
+            "rest_api_id": "1g8xnumgl3",
+            "triggers": {
+              "redeploy": "116fbda098f5a64821b9acc20d82cb2b739c809c"
+            },
+            "variables": null
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_api_gateway_integration.lambda_integration",
+            "aws_api_gateway_integration.options",
+            "aws_api_gateway_integration_response.contact_post",
+            "aws_api_gateway_integration_response.options",
+            "aws_api_gateway_method.contact_post",
+            "aws_api_gateway_method.options",
+            "aws_api_gateway_method_response.cors",
+            "aws_api_gateway_method_response.options",
+            "aws_api_gateway_resource.contact_resource",
+            "aws_api_gateway_rest_api.contact_api",
+            "aws_iam_role.lambda_role",
+            "aws_lambda_function.contact_lambda"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_api_gateway_integration",
+      "name": "lambda_integration",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "cache_key_parameters": [],
+            "cache_namespace": "rajxm6",
+            "connection_id": "",
+            "connection_type": "INTERNET",
+            "content_handling": "",
+            "credentials": "",
+            "http_method": "POST",
+            "id": "agi-1g8xnumgl3-rajxm6-POST",
+            "integration_http_method": "POST",
+            "passthrough_behavior": "WHEN_NO_MATCH",
+            "region": "us-east-1",
+            "request_parameters": {},
+            "request_templates": {},
+            "resource_id": "rajxm6",
+            "rest_api_id": "1g8xnumgl3",
+            "timeout_milliseconds": 29000,
+            "tls_config": [],
+            "type": "AWS_PROXY",
+            "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:937278768945:function:contact-form-lambda/invocations"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_api_gateway_method.contact_post",
+            "aws_api_gateway_resource.contact_resource",
+            "aws_api_gateway_rest_api.contact_api",
+            "aws_iam_role.lambda_role",
+            "aws_lambda_function.contact_lambda"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_api_gateway_integration",
+      "name": "options",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "cache_key_parameters": [],
+            "cache_namespace": "rajxm6",
+            "connection_id": "",
+            "connection_type": "INTERNET",
+            "content_handling": "",
+            "credentials": "",
+            "http_method": "OPTIONS",
+            "id": "agi-1g8xnumgl3-rajxm6-OPTIONS",
+            "integration_http_method": "",
+            "passthrough_behavior": "WHEN_NO_MATCH",
+            "region": "us-east-1",
+            "request_parameters": {},
+            "request_templates": {
+              "application/json": "{\"statusCode\": 200}"
+            },
+            "resource_id": "rajxm6",
+            "rest_api_id": "1g8xnumgl3",
+            "timeout_milliseconds": 29000,
+            "tls_config": [],
+            "type": "MOCK",
+            "uri": ""
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_api_gateway_method.options",
+            "aws_api_gateway_resource.contact_resource",
+            "aws_api_gateway_rest_api.contact_api"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_api_gateway_integration_response",
+      "name": "contact_post",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "content_handling": "",
+            "http_method": "POST",
+            "id": "agir-1g8xnumgl3-rajxm6-POST-200",
+            "region": "us-east-1",
+            "resource_id": "rajxm6",
+            "response_parameters": {
+              "method.response.header.Access-Control-Allow-Origin": "'https://www.stinessolutions.com'"
+            },
+            "response_templates": {},
+            "rest_api_id": "1g8xnumgl3",
+            "selection_pattern": "",
+            "status_code": "200"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_api_gateway_method.contact_post",
+            "aws_api_gateway_method_response.cors",
+            "aws_api_gateway_resource.contact_resource",
+            "aws_api_gateway_rest_api.contact_api"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_api_gateway_integration_response",
+      "name": "options",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "content_handling": "",
+            "http_method": "OPTIONS",
+            "id": "agir-1g8xnumgl3-rajxm6-OPTIONS-200",
+            "region": "us-east-1",
+            "resource_id": "rajxm6",
+            "response_parameters": {
+              "method.response.header.Access-Control-Allow-Headers": "'Content-Type'",
+              "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+              "method.response.header.Access-Control-Allow-Origin": "'https://www.stinessolutions.com'"
+            },
+            "response_templates": {},
+            "rest_api_id": "1g8xnumgl3",
+            "selection_pattern": "",
+            "status_code": "200"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_api_gateway_method.options",
+            "aws_api_gateway_method_response.options",
+            "aws_api_gateway_resource.contact_resource",
+            "aws_api_gateway_rest_api.contact_api"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_api_gateway_method",
+      "name": "contact_post",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "api_key_required": false,
+            "authorization": "NONE",
+            "authorization_scopes": [],
+            "authorizer_id": "",
+            "http_method": "POST",
+            "id": "agm-1g8xnumgl3-rajxm6-POST",
+            "operation_name": "",
+            "region": "us-east-1",
+            "request_models": {},
+            "request_parameters": {},
+            "request_validator_id": "",
+            "resource_id": "rajxm6",
+            "rest_api_id": "1g8xnumgl3"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_api_gateway_resource.contact_resource",
+            "aws_api_gateway_rest_api.contact_api"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_api_gateway_method",
+      "name": "options",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "api_key_required": false,
+            "authorization": "NONE",
+            "authorization_scopes": [],
+            "authorizer_id": "",
+            "http_method": "OPTIONS",
+            "id": "agm-1g8xnumgl3-rajxm6-OPTIONS",
+            "operation_name": "",
+            "region": "us-east-1",
+            "request_models": {},
+            "request_parameters": {},
+            "request_validator_id": "",
+            "resource_id": "rajxm6",
+            "rest_api_id": "1g8xnumgl3"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_api_gateway_resource.contact_resource",
+            "aws_api_gateway_rest_api.contact_api"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_api_gateway_method_response",
+      "name": "cors",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "http_method": "POST",
+            "id": "agmr-1g8xnumgl3-rajxm6-POST-200",
+            "region": "us-east-1",
+            "resource_id": "rajxm6",
+            "response_models": {},
+            "response_parameters": {
+              "method.response.header.Access-Control-Allow-Origin": true
+            },
+            "rest_api_id": "1g8xnumgl3",
+            "status_code": "200"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_api_gateway_method.contact_post",
+            "aws_api_gateway_resource.contact_resource",
+            "aws_api_gateway_rest_api.contact_api"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_api_gateway_method_response",
+      "name": "options",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "http_method": "OPTIONS",
+            "id": "agmr-1g8xnumgl3-rajxm6-OPTIONS-200",
+            "region": "us-east-1",
+            "resource_id": "rajxm6",
+            "response_models": {},
+            "response_parameters": {
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true,
+              "method.response.header.Access-Control-Allow-Origin": true
+            },
+            "rest_api_id": "1g8xnumgl3",
+            "status_code": "200"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_api_gateway_method.options",
+            "aws_api_gateway_resource.contact_resource",
+            "aws_api_gateway_rest_api.contact_api"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_api_gateway_method_settings",
+      "name": "all_methods",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "1g8xnumgl3-prod-*/*",
+            "method_path": "*/*",
+            "region": "us-east-1",
+            "rest_api_id": "1g8xnumgl3",
+            "settings": [
+              {
+                "cache_data_encrypted": false,
+                "cache_ttl_in_seconds": 300,
+                "caching_enabled": false,
+                "data_trace_enabled": true,
+                "logging_level": "INFO",
+                "metrics_enabled": true,
+                "require_authorization_for_cache_control": true,
+                "throttling_burst_limit": -1,
+                "throttling_rate_limit": -1,
+                "unauthorized_cache_control_header_strategy": "SUCCEED_WITH_RESPONSE_HEADER"
+              }
+            ],
+            "stage_name": "prod"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_api_gateway_deployment.contact_deployment",
+            "aws_api_gateway_integration.lambda_integration",
+            "aws_api_gateway_integration.options",
+            "aws_api_gateway_integration_response.contact_post",
+            "aws_api_gateway_integration_response.options",
+            "aws_api_gateway_method.contact_post",
+            "aws_api_gateway_method.options",
+            "aws_api_gateway_method_response.cors",
+            "aws_api_gateway_method_response.options",
+            "aws_api_gateway_resource.contact_resource",
+            "aws_api_gateway_rest_api.contact_api",
+            "aws_api_gateway_stage.contact_stage",
+            "aws_cloudwatch_log_group.api_gateway_logs",
+            "aws_iam_role.lambda_role",
+            "aws_lambda_function.contact_lambda"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_api_gateway_resource",
+      "name": "contact_resource",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "rajxm6",
+            "parent_id": "wrlgdo2s7d",
+            "path": "/contact",
+            "path_part": "contact",
+            "region": "us-east-1",
+            "rest_api_id": "1g8xnumgl3"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_api_gateway_rest_api.contact_api"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_api_gateway_rest_api",
+      "name": "contact_api",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "api_key_source": "HEADER",
+            "arn": "arn:aws:apigateway:us-east-1::/restapis/1g8xnumgl3",
+            "binary_media_types": [],
+            "body": null,
+            "created_date": "2025-11-23T00:22:02Z",
+            "description": "API Gateway for contact form",
+            "disable_execute_api_endpoint": false,
+            "endpoint_configuration": [
+              {
+                "ip_address_type": "ipv4",
+                "types": [
+                  "EDGE"
+                ],
+                "vpc_endpoint_ids": []
+              }
+            ],
+            "execution_arn": "arn:aws:execute-api:us-east-1:937278768945:1g8xnumgl3",
+            "fail_on_warnings": null,
+            "id": "1g8xnumgl3",
+            "minimum_compression_size": "",
+            "name": "contact-api",
+            "parameters": null,
+            "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"execute-api:Invoke\",\"Resource\":\"arn:aws:execute-api:us-east-1:937278768945:1g8xnumgl3/*/*\",\"Condition\":{\"StringEquals\":{\"aws:Referer\":\"https://www.stinessolutions.com\"}}}]}",
+            "put_rest_api_mode": null,
+            "region": "us-east-1",
+            "root_resource_id": "wrlgdo2s7d",
+            "tags": {},
+            "tags_all": {}
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_api_gateway_rest_api_policy",
+      "name": "restrict_to_cloudfront",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "1g8xnumgl3",
+            "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"execute-api:Invoke\",\"Resource\":\"arn:aws:execute-api:us-east-1:937278768945:1g8xnumgl3/*/*\",\"Condition\":{\"StringEquals\":{\"aws:Referer\":\"https://www.stinessolutions.com\"}}}]}",
+            "region": "us-east-1",
+            "rest_api_id": "1g8xnumgl3"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_api_gateway_rest_api.contact_api"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_api_gateway_stage",
+      "name": "contact_stage",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "access_log_settings": [
+              {
+                "destination_arn": "arn:aws:logs:us-east-1:937278768945:log-group:/aws/api-gateway/contact-api",
+                "format": "{\"caller\":\"$context.identity.caller\",\"httpMethod\":\"$context.httpMethod\",\"ip\":\"$context.identity.sourceIp\",\"protocol\":\"$context.protocol\",\"requestId\":\"$context.requestId\",\"requestTime\":\"$context.requestTime\",\"resourcePath\":\"$context.resourcePath\",\"responseLength\":\"$context.responseLength\",\"status\":\"$context.status\",\"user\":\"$context.identity.user\"}"
+              }
+            ],
+            "arn": "arn:aws:apigateway:us-east-1::/restapis/1g8xnumgl3/stages/prod",
+            "cache_cluster_enabled": false,
+            "cache_cluster_size": "",
+            "canary_settings": [],
+            "client_certificate_id": "",
+            "deployment_id": "rru6ao",
+            "description": "",
+            "documentation_version": "",
+            "execution_arn": "arn:aws:execute-api:us-east-1:937278768945:1g8xnumgl3/prod",
+            "id": "ags-1g8xnumgl3-prod",
+            "invoke_url": "https://1g8xnumgl3.execute-api.us-east-1.amazonaws.com/prod",
+            "region": "us-east-1",
+            "rest_api_id": "1g8xnumgl3",
+            "stage_name": "prod",
+            "tags": {},
+            "tags_all": {},
+            "variables": {},
+            "web_acl_arn": "",
+            "xray_tracing_enabled": false
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_api_gateway_deployment.contact_deployment",
+            "aws_api_gateway_integration.lambda_integration",
+            "aws_api_gateway_integration.options",
+            "aws_api_gateway_integration_response.contact_post",
+            "aws_api_gateway_integration_response.options",
+            "aws_api_gateway_method.contact_post",
+            "aws_api_gateway_method.options",
+            "aws_api_gateway_method_response.cors",
+            "aws_api_gateway_method_response.options",
+            "aws_api_gateway_resource.contact_resource",
+            "aws_api_gateway_rest_api.contact_api",
+            "aws_cloudwatch_log_group.api_gateway_logs",
+            "aws_iam_role.lambda_role",
+            "aws_lambda_function.contact_lambda"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_cloudwatch_log_group",
+      "name": "api_gateway_logs",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:logs:us-east-1:937278768945:log-group:/aws/api-gateway/contact-api",
+            "id": "/aws/api-gateway/contact-api",
+            "kms_key_id": "",
+            "log_group_class": "STANDARD",
+            "name": "/aws/api-gateway/contact-api",
+            "name_prefix": "",
+            "region": "us-east-1",
+            "retention_in_days": 14,
+            "skip_destroy": false,
+            "tags": {},
+            "tags_all": {}
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_policy",
+      "name": "lambda_ses_policy",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::937278768945:policy/lambda-ses-policy",
+            "attachment_count": 1,
+            "description": "Allow Lambda to send email via SES",
+            "id": "arn:aws:iam::937278768945:policy/lambda-ses-policy",
+            "name": "lambda-ses-policy",
+            "name_prefix": "",
+            "path": "/",
+            "policy": "{\"Statement\":[{\"Action\":[\"ses:SendEmail\",\"ses:SendRawEmail\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}",
+            "policy_id": "ANPA5UORLA4Y7TDM5SYDC",
+            "tags": {},
+            "tags_all": {}
+          },
+          "sensitive_attributes": [],
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjAifQ=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "api_gateway_logging_role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::937278768945:role/api-gateway-logging-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"apigateway.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2025-11-24T02:14:07Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "api-gateway-logging-role",
+            "inline_policy": [],
+            "managed_policy_arns": [
+              "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+            ],
+            "max_session_duration": 3600,
+            "name": "api-gateway-logging-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROA5UORLA4YRTWWNJI2O"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "lambda_role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::937278768945:role/contact-form-lambda-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2025-11-21T00:58:44Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "contact-form-lambda-role",
+            "inline_policy": [],
+            "managed_policy_arns": [
+              "arn:aws:iam::937278768945:policy/lambda-ses-policy",
+              "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+            ],
+            "max_session_duration": 3600,
+            "name": "contact-form-lambda-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {},
+            "unique_id": "AROA5UORLA4Y3NEKUWC77"
+          },
+          "sensitive_attributes": [],
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjAifQ==",
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "api_gateway_logging_policy",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "api-gateway-logging-role/arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+            "policy_arn": "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+            "role": "api-gateway-logging-role"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_role.api_gateway_logging_role"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "lambda_basic_attach",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "contact-form-lambda-role/arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+            "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+            "role": "contact-form-lambda-role"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_role.lambda_role"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "lambda_ses_attach",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "contact-form-lambda-role/arn:aws:iam::937278768945:policy/lambda-ses-policy",
+            "policy_arn": "arn:aws:iam::937278768945:policy/lambda-ses-policy",
+            "role": "contact-form-lambda-role"
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_policy.lambda_ses_policy",
+            "aws_iam_role.lambda_role"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_lambda_function",
+      "name": "contact_lambda",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "architectures": [
+              "x86_64"
+            ],
+            "arn": "arn:aws:lambda:us-east-1:937278768945:function:contact-form-lambda",
+            "code_sha256": "aYKG9odmxfaOZeqAkzdiQSn45kEdFvcCCwFAo59+2jI=",
+            "code_signing_config_arn": "",
+            "dead_letter_config": [],
+            "description": "",
+            "environment": [
+              {
+                "variables": {
+                  "DESTINATION_EMAIL": "jmstines00@gmail.com",
+                  "DOMAIN_NAME": "https://www.stinessolutions.com",
+                  "SOURCE_EMAIL": "noreply@stinessolutions.com"
+                }
+              }
+            ],
+            "ephemeral_storage": [
+              {
+                "size": 512
+              }
+            ],
+            "file_system_config": [],
+            "filename": "/home/runner/work/stines-solutions-backend/stines-solutions-backend/infrastructure/../dist/index.zip",
+            "function_name": "contact-form-lambda",
+            "handler": "sendEmailApi.handler",
+            "id": "contact-form-lambda",
+            "image_config": [],
+            "image_uri": "",
+            "invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:937278768945:function:contact-form-lambda/invocations",
+            "kms_key_arn": "",
+            "last_modified": "2025-11-24T23:28:48.000+0000",
+            "layers": [],
+            "logging_config": [
+              {
+                "application_log_level": "",
+                "log_format": "Text",
+                "log_group": "/aws/lambda/contact-form-lambda",
+                "system_log_level": ""
+              }
+            ],
+            "memory_size": 128,
+            "package_type": "Zip",
+            "publish": false,
+            "qualified_arn": "arn:aws:lambda:us-east-1:937278768945:function:contact-form-lambda:$LATEST",
+            "qualified_invoke_arn": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:937278768945:function:contact-form-lambda:$LATEST/invocations",
+            "region": "us-east-1",
+            "replace_security_groups_on_destroy": null,
+            "replacement_security_group_ids": null,
+            "reserved_concurrent_executions": -1,
+            "role": "arn:aws:iam::937278768945:role/contact-form-lambda-role",
+            "runtime": "nodejs18.x",
+            "s3_bucket": null,
+            "s3_key": null,
+            "s3_object_version": null,
+            "signing_job_arn": "",
+            "signing_profile_version_arn": "",
+            "skip_destroy": false,
+            "snap_start": [],
+            "source_code_hash": "aYKG9odmxfaOZeqAkzdiQSn45kEdFvcCCwFAo59+2jI=",
+            "source_code_size": 19797062,
+            "source_kms_key_arn": "",
+            "tags": {},
+            "tags_all": {},
+            "timeout": 3,
+            "timeouts": null,
+            "tracing_config": [
+              {
+                "mode": "PassThrough"
+              }
+            ],
+            "version": "$LATEST",
+            "vpc_config": []
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_iam_role.lambda_role"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_lambda_permission",
+      "name": "api_gateway_permission",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "action": "lambda:InvokeFunction",
+            "event_source_token": null,
+            "function_name": "contact-form-lambda",
+            "function_url_auth_type": null,
+            "id": "AllowAPIGatewayInvoke",
+            "principal": "apigateway.amazonaws.com",
+            "principal_org_id": null,
+            "qualifier": "",
+            "region": "us-east-1",
+            "source_account": null,
+            "source_arn": "arn:aws:execute-api:us-east-1:937278768945:1g8xnumgl3/*/*",
+            "statement_id": "AllowAPIGatewayInvoke",
+            "statement_id_prefix": ""
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_api_gateway_rest_api.contact_api",
+            "aws_iam_role.lambda_role",
+            "aws_lambda_function.contact_lambda"
+          ]
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}

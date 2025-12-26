@@ -26,12 +26,9 @@ output "api_routes" {
   value = module.api.api_routes
 }
 
-output "lambda_role_arn" {
-  value = aws_iam_role.lambda_role.arn
-}
-
 output "lambda_function_arn" {
-  value = aws_lambda_function.contact_lambda.arn
+  description = "ARN of the Lambda function (managed by backend)"
+  value       = data.aws_lambda_function.contact_lambda.arn
 }
 
 output "lambda_artifact_bucket" {

@@ -5,6 +5,11 @@
 # api_base_url (e.g., https://<rest_id>.execute-api.<region>.amazonaws.com/<stage>)
 # rest_api_id, stage_name
 
+# Reference the Lambda function managed by the backend
+data "aws_lambda_function" "contact_lambda" {
+  function_name = var.lambda_function_name
+}
+
 resource "aws_api_gateway_rest_api" "contact_api" {
   name        = "contact-api"
   description = "API Gateway for contact form"
@@ -82,7 +87,7 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   http_method             = aws_api_gateway_method.contact_post.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = var.lambda_function_arn
+  uri                     = data.aws_lambda_function.contact_lambda.invoke_arn
 }
 
 resource "aws_api_gateway_deployment" "contact_deployment" {
@@ -94,8 +99,7 @@ resource "aws_api_gateway_deployment" "contact_deployment" {
       aws_api_gateway_method.contact_post.id,
       aws_api_gateway_integration.options.id,
       aws_api_gateway_integration.lambda_integration.id,
-      aws_api_gateway_integration_response.options.id,
-      timestamp()
+      aws_api_gateway_integration_response.options.id
     ]))
   }
 
@@ -107,14 +111,6 @@ resource "aws_api_gateway_deployment" "contact_deployment" {
   lifecycle {
       create_before_destroy = true
   }
-}
-
-resource "aws_lambda_permission" "api_gateway_permission" {
-  statement_id  = "AllowAPIGatewayInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = var.lambda_function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.contact_api.execution_arn}/*/*"
 }
 
 resource "aws_cloudwatch_log_group" "api_gateway_logs" {

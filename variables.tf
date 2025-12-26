@@ -2,17 +2,9 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
-variable "lambda_role_name" {
-  default = "contact-form-lambda-role"
-}
-
 variable "lambda_function_name" {
-  default = "contact-form-lambda"
-}
-
-variable "lambda_code_s3_key" {
-  description = "Path to the Lambda ZIP in the artifact bucket (e.g., lambda/contact/<git-sha>.zip)"
-  type        = string
+  description = "Name of the Lambda function (managed by backend project)"
+  default     = "contact-form-lambda"
 }
 
 variable "source_email" {

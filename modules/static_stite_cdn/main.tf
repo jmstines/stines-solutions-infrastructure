@@ -122,32 +122,25 @@ resource "aws_cloudfront_distribution" "website_cdn" {
 
     cache_policy_id            = data.aws_cloudfront_cache_policy.caching_optimized.id
     origin_request_policy_id   = data.aws_cloudfront_origin_request_policy.cors_s3_origin.id
-   
-    forwarded_values {
-        query_string = false
-        cookies {
-            forward = "none"
-        }
-    }
-    }
+  }
 
-    custom_error_response {
-        error_code         = 404
-        response_code      = 200
-        response_page_path = "/index.html"
-    }
-    custom_error_response {
-        error_code         = 403
-        response_code      = 200
-        response_page_path = "/index.html"
-    }
+  custom_error_response {
+    error_code         = 404
+    response_code      = 200
+    response_page_path = "/index.html"
+  }
+  custom_error_response {
+    error_code         = 403
+    response_code      = 200
+    response_page_path = "/index.html"
+  }
 
-    restrictions {
-        geo_restriction {
-            restriction_type = "whitelist"
-            locations        = ["US"]
-        }
+  restrictions {
+    geo_restriction {
+      restriction_type = "whitelist"
+      locations        = ["US"]
     }
+  }
 }
 
 data "aws_cloudfront_cache_policy" "caching_optimized" {
