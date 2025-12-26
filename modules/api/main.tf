@@ -90,6 +90,20 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   uri                     = data.aws_lambda_function.contact_lambda.invoke_arn
 }
 
+# Integration response for Lambda (AWS_PROXY passes through Lambda response headers)
+resource "aws_api_gateway_integration_response" "contact_post" {
+  rest_api_id       = aws_api_gateway_rest_api.contact_api.id
+  resource_id       = aws_api_gateway_resource.contact_resource.id
+  http_method       = aws_api_gateway_method.contact_post.http_method
+  status_code       = "200"
+  
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = "integration.response.header.Access-Control-Allow-Origin"
+  }
+
+  depends_on = [aws_api_gateway_method_response.cors]
+}
+
 resource "aws_api_gateway_deployment" "contact_deployment" {
   rest_api_id = aws_api_gateway_rest_api.contact_api.id
 
@@ -99,13 +113,15 @@ resource "aws_api_gateway_deployment" "contact_deployment" {
       aws_api_gateway_method.contact_post.id,
       aws_api_gateway_integration.options.id,
       aws_api_gateway_integration.lambda_integration.id,
-      aws_api_gateway_integration_response.options.id
+      aws_api_gateway_integration_response.options.id,
+      aws_api_gateway_integration_response.contact_post.id
     ]))
   }
 
   depends_on = [
     aws_api_gateway_integration.lambda_integration,
-    aws_api_gateway_integration.options
+    aws_api_gateway_integration.options,
+    aws_api_gateway_integration_response.contact_post
   ]
   
   lifecycle {
