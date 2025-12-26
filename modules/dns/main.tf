@@ -9,6 +9,17 @@
 # certificate_arn
 # domain_name
 
+# aws_route53_zone.main
+# aws_route53_record.main_site
+# aws_route53_record.redirect_site (point both apex + www to the same CloudFront distribution)
+# aws_acm_certificate.cert (us-east-1 provider alias)
+# Add: aws_acm_certificate_validation with DNS validation records
+# Output:
+
+# hosted_zone_id
+# certificate_arn
+# domain_name
+
 resource "aws_route53_zone" "main" {
   name = "stinessolutions.com"
 }
