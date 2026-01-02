@@ -26,10 +26,6 @@ output "hosted_zone_id" {
   value = module.dns.hosted_zone_id
 }
 
-output "domain_name" {
-  value = var.domain_name
-}
-
 output "domain_full_url" {
   value = var.domain_full_url
 }
