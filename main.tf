@@ -53,5 +53,5 @@ module "api" {
   lambda_function_name = data.aws_lambda_function.contact_lambda.function_name
   domain_full_url      = var.domain_full_url
   domain_name          = var.domain_name
-  route53_zone_id      = module.dns.zone_id
+  route53_zone_id      = module.dns.hosted_zone_id
 }
