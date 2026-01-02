@@ -19,7 +19,12 @@ output "cloudfront_domain_name" {
 }
 
 output "api_gateway_url" {
+  value = module.api.api_custom_domain_url
+}
+
+output "api_gateway_aws_url" {
   value = module.api.api_base_url
+  description = "Direct AWS API Gateway URL (for reference)"
 }
 
 output "api_routes" {

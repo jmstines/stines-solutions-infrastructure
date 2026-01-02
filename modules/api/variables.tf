@@ -12,3 +12,13 @@ variable "domain_full_url" {
   description = "Full domain URL for CORS configuration"
   type        = string
 }
+
+variable "domain_name" {
+  description = "Base domain name for API custom domain"
+  type        = string
+}
+
+variable "route53_zone_id" {
+  description = "Route53 hosted zone ID for DNS records"
+  type        = string
+}
