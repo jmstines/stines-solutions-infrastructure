@@ -38,35 +38,4 @@ module "dns" {
   cloudfront_zone_id      = module.static_site_cdn.cloudfront_zone_id
 }
 
-# ===== Lambda Function Data Source =====
-# Lambda is managed by the backend project, not infrastructure
-# This data source references the existing Lambda function
-data "aws_lambda_function" "contact_lambda" {
-  function_name = var.lambda_function_name
-}
-
-data "aws_lambda_function" "login_lambda" {
-  function_name = var.login_lambda_function_name
-}
-
-data "aws_lambda_function" "verify_lambda" {
-  function_name = var.verify_lambda_function_name
-}
-
-data "aws_lambda_function" "logout_lambda" {
-  function_name = var.logout_lambda_function_name
-}
-
-# ===== API Gateway Module =====
-module "api" {
-  source = "./modules/api"
-  
-  lambda_function_arn         = data.aws_lambda_function.contact_lambda.arn
-  lambda_function_name        = data.aws_lambda_function.contact_lambda.function_name
-  login_lambda_function_name  = data.aws_lambda_function.login_lambda.function_name
-  verify_lambda_function_name = data.aws_lambda_function.verify_lambda.function_name
-  logout_lambda_function_name = data.aws_lambda_function.logout_lambda.function_name
-  domain_full_url             = var.domain_full_url
-  domain_name                 = var.domain_name
-  route53_zone_id             = module.dns.hosted_zone_id
-}
+# API Gateway is managed in the backend repository since it's tightly coupled with Lambda functions
