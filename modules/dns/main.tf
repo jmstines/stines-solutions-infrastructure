@@ -56,4 +56,8 @@ resource "aws_acm_certificate" "cert" {
     var.domain_alternative_name,
     "api.${var.domain_name}"
   ]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
