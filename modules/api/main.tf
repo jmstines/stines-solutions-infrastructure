@@ -80,6 +80,15 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   uri                     = data.aws_lambda_function.contact_lambda.invoke_arn
 }
 
+# Allow API Gateway to invoke Lambda
+resource "aws_lambda_permission" "api_gateway" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = data.aws_lambda_function.contact_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.contact_api.execution_arn}/*/*"
+}
+
 resource "aws_api_gateway_deployment" "contact_deployment" {
   rest_api_id = aws_api_gateway_rest_api.contact_api.id
 
