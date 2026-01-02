@@ -7,6 +7,21 @@ variable "lambda_function_name" {
   default     = "contact-form-lambda"
 }
 
+variable "login_lambda_function_name" {
+  description = "Name of the login Lambda function"
+  default     = "auth-login-lambda"
+}
+
+variable "verify_lambda_function_name" {
+  description = "Name of the verify Lambda function"
+  default     = "auth-verify-lambda"
+}
+
+variable "logout_lambda_function_name" {
+  description = "Name of the logout Lambda function"
+  default     = "auth-logout-lambda"
+}
+
 variable "source_email" {
   description = "Verified SES email address"
   type        = string

@@ -89,6 +89,254 @@ resource "aws_lambda_permission" "api_gateway" {
   source_arn    = "${aws_api_gateway_rest_api.contact_api.execution_arn}/*/*"
 }
 
+# ===== Auth Lambda References =====
+data "aws_lambda_function" "login_lambda" {
+  function_name = var.login_lambda_function_name
+}
+
+data "aws_lambda_function" "verify_lambda" {
+  function_name = var.verify_lambda_function_name
+}
+
+data "aws_lambda_function" "logout_lambda" {
+  function_name = var.logout_lambda_function_name
+}
+
+# ===== /auth Resource =====
+resource "aws_api_gateway_resource" "auth_resource" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api.id
+  parent_id   = aws_api_gateway_rest_api.contact_api.root_resource_id
+  path_part   = "auth"
+}
+
+# ===== /auth/login =====
+resource "aws_api_gateway_resource" "login_resource" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api.id
+  parent_id   = aws_api_gateway_resource.auth_resource.id
+  path_part   = "login"
+}
+
+resource "aws_api_gateway_method" "login_options" {
+  rest_api_id   = aws_api_gateway_rest_api.contact_api.id
+  resource_id   = aws_api_gateway_resource.login_resource.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_method" "login_post" {
+  rest_api_id   = aws_api_gateway_rest_api.contact_api.id
+  resource_id   = aws_api_gateway_resource.login_resource.id
+  http_method   = "POST"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "login_options" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api.id
+  resource_id = aws_api_gateway_resource.login_resource.id
+  http_method = aws_api_gateway_method.login_options.http_method
+  type        = "MOCK"
+  request_templates = {
+    "application/json" = "{\"statusCode\": 200}"
+  }
+}
+
+resource "aws_api_gateway_method_response" "login_options" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api.id
+  resource_id = aws_api_gateway_resource.login_resource.id
+  http_method = aws_api_gateway_method.login_options.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"      = true
+    "method.response.header.Access-Control-Allow-Methods"     = true
+    "method.response.header.Access-Control-Allow-Headers"     = true
+    "method.response.header.Access-Control-Allow-Credentials" = true
+  }
+}
+
+resource "aws_api_gateway_integration_response" "login_options" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api.id
+  resource_id = aws_api_gateway_resource.login_resource.id
+  http_method = aws_api_gateway_method.login_options.http_method
+  status_code = aws_api_gateway_method_response.login_options.status_code
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"      = "'${var.domain_full_url}'"
+    "method.response.header.Access-Control-Allow-Methods"     = "'OPTIONS,POST'"
+    "method.response.header.Access-Control-Allow-Headers"     = "'Content-Type'"
+    "method.response.header.Access-Control-Allow-Credentials" = "'true'"
+  }
+}
+
+resource "aws_api_gateway_integration" "login_lambda" {
+  rest_api_id             = aws_api_gateway_rest_api.contact_api.id
+  resource_id             = aws_api_gateway_resource.login_resource.id
+  http_method             = aws_api_gateway_method.login_post.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = data.aws_lambda_function.login_lambda.invoke_arn
+}
+
+resource "aws_lambda_permission" "login_api_gateway" {
+  statement_id  = "AllowAPIGatewayInvokeLogin"
+  action        = "lambda:InvokeFunction"
+  function_name = data.aws_lambda_function.login_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.contact_api.execution_arn}/*/*"
+}
+
+# ===== /auth/verify =====
+resource "aws_api_gateway_resource" "verify_resource" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api.id
+  parent_id   = aws_api_gateway_resource.auth_resource.id
+  path_part   = "verify"
+}
+
+resource "aws_api_gateway_method" "verify_options" {
+  rest_api_id   = aws_api_gateway_rest_api.contact_api.id
+  resource_id   = aws_api_gateway_resource.verify_resource.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_method" "verify_get" {
+  rest_api_id   = aws_api_gateway_rest_api.contact_api.id
+  resource_id   = aws_api_gateway_resource.verify_resource.id
+  http_method   = "GET"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "verify_options" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api.id
+  resource_id = aws_api_gateway_resource.verify_resource.id
+  http_method = aws_api_gateway_method.verify_options.http_method
+  type        = "MOCK"
+  request_templates = {
+    "application/json" = "{\"statusCode\": 200}"
+  }
+}
+
+resource "aws_api_gateway_method_response" "verify_options" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api.id
+  resource_id = aws_api_gateway_resource.verify_resource.id
+  http_method = aws_api_gateway_method.verify_options.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"      = true
+    "method.response.header.Access-Control-Allow-Methods"     = true
+    "method.response.header.Access-Control-Allow-Headers"     = true
+    "method.response.header.Access-Control-Allow-Credentials" = true
+  }
+}
+
+resource "aws_api_gateway_integration_response" "verify_options" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api.id
+  resource_id = aws_api_gateway_resource.verify_resource.id
+  http_method = aws_api_gateway_method.verify_options.http_method
+  status_code = aws_api_gateway_method_response.verify_options.status_code
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"      = "'${var.domain_full_url}'"
+    "method.response.header.Access-Control-Allow-Methods"     = "'OPTIONS,GET'"
+    "method.response.header.Access-Control-Allow-Headers"     = "'Content-Type'"
+    "method.response.header.Access-Control-Allow-Credentials" = "'true'"
+  }
+}
+
+resource "aws_api_gateway_integration" "verify_lambda" {
+  rest_api_id             = aws_api_gateway_rest_api.contact_api.id
+  resource_id             = aws_api_gateway_resource.verify_resource.id
+  http_method             = aws_api_gateway_method.verify_get.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = data.aws_lambda_function.verify_lambda.invoke_arn
+}
+
+resource "aws_lambda_permission" "verify_api_gateway" {
+  statement_id  = "AllowAPIGatewayInvokeVerify"
+  action        = "lambda:InvokeFunction"
+  function_name = data.aws_lambda_function.verify_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.contact_api.execution_arn}/*/*"
+}
+
+# ===== /auth/logout =====
+resource "aws_api_gateway_resource" "logout_resource" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api.id
+  parent_id   = aws_api_gateway_resource.auth_resource.id
+  path_part   = "logout"
+}
+
+resource "aws_api_gateway_method" "logout_options" {
+  rest_api_id   = aws_api_gateway_rest_api.contact_api.id
+  resource_id   = aws_api_gateway_resource.logout_resource.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_method" "logout_post" {
+  rest_api_id   = aws_api_gateway_rest_api.contact_api.id
+  resource_id   = aws_api_gateway_resource.logout_resource.id
+  http_method   = "POST"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "logout_options" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api.id
+  resource_id = aws_api_gateway_resource.logout_resource.id
+  http_method = aws_api_gateway_method.logout_options.http_method
+  type        = "MOCK"
+  request_templates = {
+    "application/json" = "{\"statusCode\": 200}"
+  }
+}
+
+resource "aws_api_gateway_method_response" "logout_options" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api.id
+  resource_id = aws_api_gateway_resource.logout_resource.id
+  http_method = aws_api_gateway_method.logout_options.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"      = true
+    "method.response.header.Access-Control-Allow-Methods"     = true
+    "method.response.header.Access-Control-Allow-Headers"     = true
+    "method.response.header.Access-Control-Allow-Credentials" = true
+  }
+}
+
+resource "aws_api_gateway_integration_response" "logout_options" {
+  rest_api_id = aws_api_gateway_rest_api.contact_api.id
+  resource_id = aws_api_gateway_resource.logout_resource.id
+  http_method = aws_api_gateway_method.logout_options.http_method
+  status_code = aws_api_gateway_method_response.logout_options.status_code
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"      = "'${var.domain_full_url}'"
+    "method.response.header.Access-Control-Allow-Methods"     = "'OPTIONS,POST'"
+    "method.response.header.Access-Control-Allow-Headers"     = "'Content-Type'"
+    "method.response.header.Access-Control-Allow-Credentials" = "'true'"
+  }
+}
+
+resource "aws_api_gateway_integration" "logout_lambda" {
+  rest_api_id             = aws_api_gateway_rest_api.contact_api.id
+  resource_id             = aws_api_gateway_resource.logout_resource.id
+  http_method             = aws_api_gateway_method.logout_post.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = data.aws_lambda_function.logout_lambda.invoke_arn
+}
+
+resource "aws_lambda_permission" "logout_api_gateway" {
+  statement_id  = "AllowAPIGatewayInvokeLogout"
+  action        = "lambda:InvokeFunction"
+  function_name = data.aws_lambda_function.logout_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.contact_api.execution_arn}/*/*"
+}
+
 resource "aws_api_gateway_deployment" "contact_deployment" {
   rest_api_id = aws_api_gateway_rest_api.contact_api.id
 
@@ -98,13 +346,22 @@ resource "aws_api_gateway_deployment" "contact_deployment" {
       aws_api_gateway_method.contact_post.id,
       aws_api_gateway_integration.options.id,
       aws_api_gateway_integration.lambda_integration.id,
-      aws_api_gateway_integration_response.options.id
+      aws_api_gateway_integration_response.options.id,
+      aws_api_gateway_method.login_post.id,
+      aws_api_gateway_method.verify_get.id,
+      aws_api_gateway_method.logout_post.id,
+      aws_api_gateway_integration.login_lambda.id,
+      aws_api_gateway_integration.verify_lambda.id,
+      aws_api_gateway_integration.logout_lambda.id
     ]))
   }
 
   depends_on = [
     aws_api_gateway_integration.lambda_integration,
-    aws_api_gateway_integration.options
+    aws_api_gateway_integration.options,
+    aws_api_gateway_integration.login_lambda,
+    aws_api_gateway_integration.verify_lambda,
+    aws_api_gateway_integration.logout_lambda
   ]
   
   lifecycle {

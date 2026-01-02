@@ -7,7 +7,20 @@ variable "lambda_function_name" {
   description = "Name of the Lambda function"
   type        = string
 }
+variable "login_lambda_function_name" {
+  description = "Name of the login Lambda function"
+  type        = string
+}
 
+variable "verify_lambda_function_name" {
+  description = "Name of the verify Lambda function"
+  type        = string
+}
+
+variable "logout_lambda_function_name" {
+  description = "Name of the logout Lambda function"
+  type        = string
+}
 variable "domain_full_url" {
   description = "Full domain URL for CORS configuration"
   type        = string
