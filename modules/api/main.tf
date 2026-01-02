@@ -173,6 +173,8 @@ resource "aws_api_gateway_method_settings" "all_methods" {
     metrics_enabled    = true
     logging_level      = "INFO" # or "ERROR"
     data_trace_enabled = true
+    throttling_burst_limit = 10   # Allow burst of 10 requests
+    throttling_rate_limit  = 5    # 5 requests per second steady state
   }
 }
 
