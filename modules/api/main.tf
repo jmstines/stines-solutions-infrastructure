@@ -177,6 +177,8 @@ resource "aws_api_gateway_stage" "contact_stage" {
       responseLength = "$context.responseLength"
     })
   }
+
+  depends_on = [aws_api_gateway_account.account_settings]
 }
 
 resource "aws_api_gateway_method_settings" "all_methods" {
