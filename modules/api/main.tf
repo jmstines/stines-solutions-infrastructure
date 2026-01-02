@@ -35,16 +35,6 @@ resource "aws_api_gateway_method" "contact_post" {
   authorization = "NONE"
 }
 
-resource "aws_api_gateway_method_response" "cors" {
-  rest_api_id = aws_api_gateway_rest_api.contact_api.id
-  resource_id = aws_api_gateway_resource.contact_resource.id
-  http_method = aws_api_gateway_method.contact_post.http_method
-  status_code = "200"
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin" = true
-  }
-}
-
 resource "aws_api_gateway_method_response" "options" {
   rest_api_id = aws_api_gateway_rest_api.contact_api.id
   resource_id = aws_api_gateway_resource.contact_resource.id
