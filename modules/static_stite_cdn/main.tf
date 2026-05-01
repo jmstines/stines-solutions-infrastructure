@@ -94,6 +94,38 @@ resource "aws_cloudfront_origin_access_control" "oac" {
   signing_protocol                  = "sigv4"
 }
 
+resource "aws_cloudfront_response_headers_policy" "security_headers" {
+  name    = "stines-solutions-security-headers"
+
+  security_headers_config {
+    content_type_options {
+      override = true
+    }
+    frame_options {
+      frame_option = "DENY"
+      override     = true
+    }
+    xss_protection {
+      mode_block  = true
+      protection  = true
+      override    = true
+    }
+    strict_transport_security {
+      access_control_max_age_sec = 31536000
+      include_subdomains         = true
+      override                   = true
+    }
+    content_security_policy {
+      content_security_policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://api.stinessolutions.com; font-src 'self'; object-src 'none'; frame-ancestors 'none';"
+      override                = true
+    }
+    referrer_policy {
+      referrer_policy = "strict-origin-when-cross-origin"
+      override        = true
+    }
+  }
+}
+
 resource "aws_cloudfront_distribution" "website_cdn" {
   origin {
     domain_name              = aws_s3_bucket.website.bucket_regional_domain_name
@@ -122,6 +154,7 @@ resource "aws_cloudfront_distribution" "website_cdn" {
 
     cache_policy_id            = data.aws_cloudfront_cache_policy.caching_optimized.id
     origin_request_policy_id   = data.aws_cloudfront_origin_request_policy.cors_s3_origin.id
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.security_headers.id
   }
 
   custom_error_response {
